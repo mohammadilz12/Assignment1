@@ -49,9 +49,9 @@
         "# === Requirements ===\n",
         "# pip install pandas matplotlib\n",
         "\n",
-        "import ....... as pd\n",
-        "import ....... as np\n",
-        "import matplotlib........... as plt\n",
+        "import numpy as pd\n",
+        "import pandas as np\n",
+        "import matplotlib pyplot as plt\n",
         "from pathlib import Path\n"
       ],
       "metadata": {
@@ -67,8 +67,8 @@
         "URL_RED   = \"https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv\"\n",
         "URL_WHITE = \"https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv\"\n",
         "\n",
-        "red   = pd......(URL_RED, sep=\"..........\")\n",
-        "white = pd......(URL_WHITE, sep=\"..........\")\n"
+        "red   = pd.read_csv(URL_RED, sep=\";\")\n",
+        "white = pd.read_csv(URL_WHITE, sep=\";\")\n"
       ],
       "metadata": {
         "id": "ErqnxAGRaY_C"
@@ -80,7 +80,7 @@
       "cell_type": "code",
       "source": [
         "# ---------- 2) Sanity checks ----------\n",
-        "print(\"Red shape:\", red..........., \"White shape:\", white...........)\n",
+        "print(\"Red shape:\", red.shape, \"White shape:\", white.shape)\n",
         "print(\"Columns equal? ->\", list(red.columns) == list(white.columns))\n",
         "print(\"Columns:\", list(red.columns))\n"
       ],
@@ -109,7 +109,7 @@
         "red[\"type\"] = \"red\"\n",
         "white[\"type\"] = \"white\"\n",
         "\n",
-        "df = pd...........([red, white], ignore_index=True)\n",
+        "df = pd.concat([red, white], ignore_index=True)\n",
         "print(\"\\nMerged shape:\", df.shape)\n"
       ],
       "metadata": {
@@ -123,7 +123,7 @@
       "source": [
         "# ---------- 4) Basic exploration ----------\n",
         "print(\"\\nDtypes:\\n\", df.dtypes)\n",
-        "print(\"\\nMissing values per column:\\n\", df...........().sum().sort_values(ascending=False))\n",
+        "print(\"\\nMissing values per column:\\n\", dfisna().sum().sort_values(ascending=False))\n",
         "print(\"\\nHead:\\n\", df.head())\n"
       ],
       "metadata": {
@@ -136,7 +136,7 @@
       "cell_type": "code",
       "source": [
         "# Uniqueness & duplicates\n",
-        "dup_count = df.duplicated()...........()\n",
+        "dup_count = df.duplicated()sum()\n",
         "print(\"\\nDuplicate rows:\", dup_count)\n",
         "\n",
         "# Descriptive statistics (numeric)\n",
@@ -144,8 +144,8 @@
         "print(\"\\nNumeric summary:\\n\", df[num_cols].describe().T)\n",
         "\n",
         "# Target distributions\n",
-        "print(\"\\nQuality distribution (overall):\\n\", df[\"quality\"]...........().sort_index())\n",
-        "print(\"\\nQuality distribution by type:\\n\", df.groupby(\"type\")[\"quality\"]...........().sort_index())\n"
+        "print(\"\\nQuality distribution (overall):\\n\", df[\"quality\"].value_counts().sort_index())\n",
+        "print(\"\\nQuality distribution by type:\\n\", df.groupby(\"type\")[\"quality\"].value_counts().sort_index())\n"
       ],
       "metadata": {
         "id": "ou0kWts-aopS"
@@ -165,7 +165,7 @@
         "for i, ax in enumerate(axes):\n",
         "    if i < n:\n",
         "        col = top_vars[i]\n",
-        "        ax...........(df[col].dropna(), bins=30)\n",
+        "        ax.hist(df[col].dropna(), bins=30)\n",
         "        ax.set_title(f\"Histogram: {col}\")\n",
         "        ax.set_xlabel(col)\n",
         "        if i == 0:\n",
@@ -189,7 +189,7 @@
       "source": [
         "# Boxplot of quality by type (class distribution spread)\n",
         "plt.figure()\n",
-        "df...........(column=\"quality\", by=\"type\")\n",
+        "df.boxplot(column=\"quality\", by=\"type\")\n",
         "plt.suptitle(\"\")\n",
         "plt.title(\"Quality by Wine Type\")\n",
         "plt.xlabel(\"Type\")\n",
@@ -207,7 +207,7 @@
       "cell_type": "code",
       "source": [
         "# Correlation heatmap (numeric only)\n",
-        "corr = df[num_cols]...........()\n",
+        "corr = df[num_cols].corr()\n",
         "plt.figure(figsize=(7, 6))\n",
         "plt.imshow(corr, interpolation=\"nearest\")\n",
         "plt.title(\"Correlation Heatmap\")\n",
