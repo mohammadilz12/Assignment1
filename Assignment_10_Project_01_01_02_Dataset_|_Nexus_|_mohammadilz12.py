@@ -1,0 +1,256 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/mohammadilz12/Assignment1/blob/main/Assignment_10_Project_01_01_02_Dataset_%7C_Nexus_%7C_mohammadilz12.py\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 🍷 Mini-Project: Merge & Explore the Wine Quality Datasets\n",
+        "\n",
+        "\n",
+        "> **Goal: Merge Wine Quality – Red and Wine Quality – White (UCI) into a single dataset, do a careful first-look exploration, and save the merged file to CSV.**\n",
+        "\n",
+        "<p align=\"center\">📢⚠️📂  </p>\n",
+        "\n",
+        "<p align=\"center\"> Please name your file using the format: <code>assignmentName_nickname.py/.ipynb</code> (e.g., <code>project1_ali.py</code>) and push it to GitHub with a clear commit message.</p>\n",
+        "\n",
+        "<p align=\"center\"> 🚨📝🧠 </p>"
+      ],
+      "metadata": {
+        "id": "5pY7aLZSZQM9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# === Requirements ===\n",
+        "# pip install pandas matplotlib\n",
+        "\n",
+        "import ....... as pd\n",
+        "import ....... as np\n",
+        "import matplotlib........... as plt\n",
+        "from pathlib import Path\n"
+      ],
+      "metadata": {
+        "id": "wpNpLMF8aX1s"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# ---------- 1) Load ----------\n",
+        "URL_RED   = \"https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv\"\n",
+        "URL_WHITE = \"https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv\"\n",
+        "\n",
+        "red   = pd......(URL_RED, sep=\"..........\")\n",
+        "white = pd......(URL_WHITE, sep=\"..........\")\n"
+      ],
+      "metadata": {
+        "id": "ErqnxAGRaY_C"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# ---------- 2) Sanity checks ----------\n",
+        "print(\"Red shape:\", red..........., \"White shape:\", white...........)\n",
+        "print(\"Columns equal? ->\", list(red.columns) == list(white.columns))\n",
+        "print(\"Columns:\", list(red.columns))\n"
+      ],
+      "metadata": {
+        "id": "lVbxevgpabbF"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# (Optional) strict schema assertion (search and read about assert in Python)\n",
+        "assert list(red.columns) == list(white.columns), \"Column mismatch between red and white datasets.\"\n"
+      ],
+      "metadata": {
+        "id": "5vV73isEadfQ"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# ---------- 3) Tag source & merge ----------\n",
+        "red[\"type\"] = \"red\"\n",
+        "white[\"type\"] = \"white\"\n",
+        "\n",
+        "df = pd...........([red, white], ignore_index=True)\n",
+        "print(\"\\nMerged shape:\", df.shape)\n"
+      ],
+      "metadata": {
+        "id": "uVTeWORRakKq"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# ---------- 4) Basic exploration ----------\n",
+        "print(\"\\nDtypes:\\n\", df.dtypes)\n",
+        "print(\"\\nMissing values per column:\\n\", df...........().sum().sort_values(ascending=False))\n",
+        "print(\"\\nHead:\\n\", df.head())\n"
+      ],
+      "metadata": {
+        "id": "OsMo1KOhambz"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Uniqueness & duplicates\n",
+        "dup_count = df.duplicated()...........()\n",
+        "print(\"\\nDuplicate rows:\", dup_count)\n",
+        "\n",
+        "# Descriptive statistics (numeric)\n",
+        "num_cols = df.select_dtypes(include=[np.number]).columns\n",
+        "print(\"\\nNumeric summary:\\n\", df[num_cols].describe().T)\n",
+        "\n",
+        "# Target distributions\n",
+        "print(\"\\nQuality distribution (overall):\\n\", df[\"quality\"]...........().sort_index())\n",
+        "print(\"\\nQuality distribution by type:\\n\", df.groupby(\"type\")[\"quality\"]...........().sort_index())\n"
+      ],
+      "metadata": {
+        "id": "ou0kWts-aopS"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# ---------- 5) A few simple visuals (optional for report) ----------\n",
+        "# Histograms of numeric features (quick feel for ranges & skew)\n",
+        "n = min(4, len(top_vars))\n",
+        "\n",
+        "fig, axes = plt.subplots(1, 4, figsize=(16, 3), sharey=True)\n",
+        "\n",
+        "for i, ax in enumerate(axes):\n",
+        "    if i < n:\n",
+        "        col = top_vars[i]\n",
+        "        ax...........(df[col].dropna(), bins=30)\n",
+        "        ax.set_title(f\"Histogram: {col}\")\n",
+        "        ax.set_xlabel(col)\n",
+        "        if i == 0:\n",
+        "            ax.set_ylabel(\"Count\")\n",
+        "        else:\n",
+        "            ax.set_ylabel(\"\")\n",
+        "    else:\n",
+        "        ax.axis(\"off\")  # hide unused panels if top_vars has < 4\n",
+        "\n",
+        "plt.tight_layout()\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "2Pa_iCVzaqzp"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Boxplot of quality by type (class distribution spread)\n",
+        "plt.figure()\n",
+        "df...........(column=\"quality\", by=\"type\")\n",
+        "plt.suptitle(\"\")\n",
+        "plt.title(\"Quality by Wine Type\")\n",
+        "plt.xlabel(\"Type\")\n",
+        "plt.ylabel(\"Quality\")\n",
+        "plt.tight_layout()\n",
+        "plt.show()\n"
+      ],
+      "metadata": {
+        "id": "w9z9f2OMatLD"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Correlation heatmap (numeric only)\n",
+        "corr = df[num_cols]...........()\n",
+        "plt.figure(figsize=(7, 6))\n",
+        "plt.imshow(corr, interpolation=\"nearest\")\n",
+        "plt.title(\"Correlation Heatmap\")\n",
+        "plt.colorbar()\n",
+        "plt.xticks(range(len(num_cols)), num_cols, rotation=90)\n",
+        "plt.yticks(range(len(num_cols)), num_cols)\n",
+        "plt.tight_layout()\n",
+        "plt.show()\n"
+      ],
+      "metadata": {
+        "id": "m9OZ2n2nawIP"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "NHQPRTdLZI9R"
+      },
+      "outputs": [],
+      "source": [
+        "# ---------- 6) Save ----------\n",
+        "OUT_DIR = Path(\"./outputs\")\n",
+        "OUT_DIR.mkdir(parents=True, exist_ok=True)\n",
+        "out_file = OUT_DIR / \"wine_quality_merged.csv\"\n",
+        "df.to_csv(out_file, index=False)\n",
+        "print(f\"\\nSaved merged file to: {out_file.resolve()}\")\n",
+        "\n",
+        "# Quick verification of saved file\n",
+        "df_check = pd.read_csv(out_file)\n",
+        "print(\"Reloaded shape:\", df_check.shape)\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "1iYBWO43D0LY"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
