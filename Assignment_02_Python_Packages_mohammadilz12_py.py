@@ -557,6 +557,23 @@
           "metadata": {}
         }
       ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "code = \"\"\"\n",
+        "# اینجا کد Python Assignment 02 قرار می‌گیرد\n",
+        "print(\"Hello, World!\")\n",
+        "\"\"\"\n",
+        "\n",
+        "with open(\"Assignment_02_Python_Packages_mohammadilz12.py\", \"w\") as f:\n",
+        "    f.write(code)"
+      ],
+      "metadata": {
+        "id": "D2uOJz93sbi3"
+      },
+      "execution_count": 2,
+      "outputs": []
     }
   ]
 }
